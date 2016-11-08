@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8'?>  
+<!DOCTYPE hibernate-configuration PUBLIC  
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"  
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">  
+  
+<hibernate-configuration>  
+  
+    <session-factory>  
+        <property name="hbm2ddl.auto">update</property>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property>  
+        <property name="connection.url">jdbc:mysql://alarcosj.esi.uclm.es:3306/multas</property>  
+        <property name="connection.username">iso2</property>  
+        <property name="connection.password">iso2</property>  
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>  
+
+    	<mapping class="edu.uclm.esi.iso2.multas.domain.Inquiry"/>
+    	<mapping class="edu.uclm.esi.iso2.multas.domain.Owner"/>
+    	<mapping class="edu.uclm.esi.iso2.multas.domain.Vehicle"/>  
+    	<mapping class="edu.uclm.esi.iso2.multas.domain.Sanction"/> 
+    	<mapping class="edu.uclm.esi.iso2.multas.domain.Driver"/>  
+    	<mapping class="edu.uclm.esi.iso2.multas.domain.SanctionHolder"/>  
+    </session-factory>  
+  
+</hibernate-configuration>  
