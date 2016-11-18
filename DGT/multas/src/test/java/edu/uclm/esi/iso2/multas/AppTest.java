@@ -1,5 +1,7 @@
 package edu.uclm.esi.iso2.multas;
 
+import edu.uclm.esi.iso2.multas.dao.DriverDao;
+import edu.uclm.esi.iso2.multas.domain.Driver;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -33,6 +35,8 @@ public class AppTest
      */
     public void testApp()
     {
-        assertTrue( true );
+    	//DriverDao dd=new DriverDao();
+        //Driver driver=dd.findByDni("5000000");
+        //System.out.println(driver.getDni());
     }
 }

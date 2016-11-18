@@ -14,6 +14,7 @@ public class GeneralDao<T> {
     public GeneralDao() {
     	// Si quitamos el comentario a la línea siguiente, la base de datos se vaciará.
         // HibernateFactory.buildIfNeeded();
+    	System.out.println("");
     }
 
     protected void startOperation() throws HibernateException {

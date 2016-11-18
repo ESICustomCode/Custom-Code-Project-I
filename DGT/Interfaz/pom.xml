@@ -9,7 +9,7 @@
   </parent>
   <groupId>edu.uclm.esi.iso2</groupId>
   <artifactId>Interfaz</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.0</version>
   <name>Interfaz</name>
   <url>http://maven.apache.org</url>
   <properties>
@@ -22,5 +22,11 @@
       <version>3.8.1</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+    	<groupId>edu.uclm.esi.iso2</groupId>
+    	<artifactId>Radar</artifactId>
+    	<version>0.1.0</version>
+    </dependency>
   </dependencies>
+  
 </project>

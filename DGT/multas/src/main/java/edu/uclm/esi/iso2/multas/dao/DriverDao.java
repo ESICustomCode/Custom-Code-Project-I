@@ -1,10 +1,8 @@
 package edu.uclm.esi.iso2.multas.dao;
 
-import org.hibernate.Hibernate;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
 import javax.persistence.Query;
+
+import org.hibernate.HibernateException;
 
 import edu.uclm.esi.iso2.multas.domain.Driver;
 
@@ -18,7 +16,7 @@ public class DriverDao extends GeneralDao<Driver> {
         try {
             startOperation();
             
-            Query query=(Query) session.createQuery("from Driver where dni=?");
+            Query query= (Query) session.createQuery("from Driver where dni=?");
             query.setParameter(0, dni);
             
             driver = (Driver) query.getSingleResult();
