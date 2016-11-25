@@ -1,9 +1,14 @@
 package edu.uclm.esi.iso2.Radar.domain;
 
+import java.util.List;
+
+import edu.uclm.esi.iso2.multas.dao.GeneralDao;
+import edu.uclm.esi.iso2.multas.domain.Vehicle;
+
 public class Radar extends Thread {
 
 	private boolean estado;
-
+	
 	public Radar(String msg){
 		super(msg);
 	}
@@ -18,8 +23,14 @@ public class Radar extends Thread {
 	
 	public void run(){
 		setEstado(true);
-		
-		while(estado){
-		}
+		while(isEstado()){
+
+			}
+			
 	}
+
+	public void parar(){
+		setEstado(false);;
+	}
+	
 }

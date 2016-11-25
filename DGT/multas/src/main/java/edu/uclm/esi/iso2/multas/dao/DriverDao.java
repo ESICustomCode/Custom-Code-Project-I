@@ -16,7 +16,7 @@ public class DriverDao extends GeneralDao<Driver> {
         try {
             startOperation();
             
-            Query query= (Query) session.createQuery("from Driver where dni=?");
+            Query query= session.createQuery("from Driver where dni=?");
             query.setParameter(0, dni);
             
             driver = (Driver) query.getSingleResult();

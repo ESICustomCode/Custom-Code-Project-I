@@ -2,7 +2,7 @@ package edu.uclm.esi.iso2.Interfaz.presentacion;
 
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 import edu.uclm.esi.iso2.Radar.domain.Radar;
 
@@ -16,6 +16,7 @@ public class Interfaz {
 	private JFrame frame;
 	private JButton btnIniciar;
 	private Radar radar;
+	private JButton btnApagar;
 	/**
 	 * Launch the application.
 	 */
@@ -51,6 +52,11 @@ public class Interfaz {
 		btnIniciar.addActionListener(new BtnIniciarActionListener());
 		frame.getContentPane().add(btnIniciar, BorderLayout.WEST);
 		
+		btnApagar = new JButton("Apagar");
+		btnApagar.setEnabled(false);
+		btnApagar.addActionListener(new BtnApagarActionListener());
+		frame.getContentPane().add(btnApagar, BorderLayout.EAST);
+		
 	}
 
 	private class BtnIniciarActionListener implements ActionListener {
@@ -58,9 +64,22 @@ public class Interfaz {
 			iniciarRadar();
 		}
 	}
+	private class BtnApagarActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			pararRadar();
+		}
+	}
 	
 	public void iniciarRadar(){
 		radar=new Radar("Radar 1");
 		radar.start();
+		btnIniciar.setEnabled(false);
+		btnApagar.setEnabled(true);
+	}
+	
+	public void pararRadar(){
+		radar.parar();
+		btnIniciar.setEnabled(true);
+		btnApagar.setEnabled(false);
 	}
 }

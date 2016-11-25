@@ -14,7 +14,7 @@ public class VehicleDao extends GeneralDao<Vehicle> {
 		Vehicle vehicle = null;
         try {
             startOperation();
-            Query query=(Query) session.createQuery("from Vehicle where license=?");
+            Query query= session.createQuery("from Vehicle where license=?");
             query.setParameter(0, license);
             vehicle = (Vehicle) query.getSingleResult();
             transaction.commit();

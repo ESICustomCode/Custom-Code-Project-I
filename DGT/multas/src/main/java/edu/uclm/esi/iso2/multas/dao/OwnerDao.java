@@ -15,7 +15,7 @@ public class OwnerDao extends GeneralDao<Owner> {
 		Owner owner = null;
         try {
             startOperation();
-            Query query=(Query) session.createQuery("idOwner from OwnerVehicle where license=? and ");
+            Query query= session.createQuery("idOwner from OwnerVehicle where license=? and ");
             query.setParameter(1, dni);
             owner = (Owner) query.getSingleResult();
             transaction.commit();
@@ -31,7 +31,7 @@ public class OwnerDao extends GeneralDao<Owner> {
 		Owner owner = null;
         try {
             startOperation();
-            Query query=(Query) session.createQuery("from Vehicle where license=?");
+            Query query= session.createQuery("from Vehicle where license=?");
             query.setParameter(0, license);
             Vehicle vehicle=(Vehicle) query.getSingleResult();
             owner=vehicle.getOwner();
