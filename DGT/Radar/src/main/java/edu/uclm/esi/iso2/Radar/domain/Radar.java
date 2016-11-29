@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Random;
 
 import edu.uclm.esi.iso2.multas.dao.GeneralDao;
+import edu.uclm.esi.iso2.multas.domain.Inquiry;
+import edu.uclm.esi.iso2.multas.domain.Manager;
 import edu.uclm.esi.iso2.multas.domain.SanctionHolder;
 import edu.uclm.esi.iso2.multas.domain.Vehicle;
 
@@ -42,11 +44,12 @@ public class Radar extends Thread {
 		
 		while(isEstado()){	
 		
-			double velocidad=GenerarVelocidadAleatoria();
+			double velocidadVehiculo=GenerarVelocidadAleatoria();
 			
-			if(velocidadMaxima<velocidad){
+			if(velocidadMaxima<velocidadVehiculo){
 				Vehicle pillado= GenerarValoresVehiculos();
-				System.out.println("Vehiculo: "+ pillado.getLicense()+"\nDirección: "+ direccion +"\nVelocidadMaxima: "+ velocidadMaxima+"\nVelocidad Coche: "+velocidad );
+				//System.out.println("Vehiculo: "+ pillado.getLicense()+"\nDirección: "+ direccion +"\nVelocidadMaxima: "+ velocidadMaxima+"\nVelocidad Coche: "+velocidadVehiculo );
+				abrirExpediente(pillado.getLicense(), direccion, velocidadMaxima, velocidadVehiculo);
 			}
 		}
 		
@@ -78,12 +81,16 @@ public class Radar extends Thread {
 	
 	public double GenerarVelocidadAleatoria(){
 		Random rd=new Random();
-		return rd.nextInt(200) + rd.nextDouble();
+		return rd.nextInt(200);
 	}
 	
 	public int velocidadMaximaVia(){
 		Random rd=new Random();
 		int [] velocidades={30,40,50,60,70,80,90,100,110,120};
 		return velocidades[rd.nextInt(velocidades.length)];
+	}
+	
+	public void abrirExpediente(String licencia, String direccion,int velocidadMaxima, double velocidadVehiculo){
+		int numeroExpediente=Manager.get().openInquiry(licencia, velocidadVehiculo, direccion, velocidadMaxima);
 	}
 }
