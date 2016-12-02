@@ -93,4 +93,8 @@ public class Radar extends Thread {
 	public void abrirExpediente(String licencia, String direccion,int velocidadMaxima, double velocidadVehiculo){
 		int numeroExpediente=Manager.get().openInquiry(licencia, velocidadVehiculo, direccion, velocidadMaxima);
 	}
+	
+	public List<Inquiry> listaExpedientes(){
+		return new GeneralDao().findAll(Inquiry.class);
+	}
 }
