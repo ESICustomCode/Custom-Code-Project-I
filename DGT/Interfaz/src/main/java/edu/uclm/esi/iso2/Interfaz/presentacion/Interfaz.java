@@ -17,15 +17,19 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class Interfaz {
 
 	private JFrame frame;
-	private JButton btnIniciar;
 	private Radar radar;
-	private JButton btnApagar;
 	private List<Inquiry> listaExpedientes;
+	private JButton btnIniciar;
+	private JButton btnApagar;
 	private JButton btnSancionarConductor;
+	private JButton btnPagarSancin;
 
 	/**
 	 * Launch the application.
@@ -57,40 +61,77 @@ public class Interfaz {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		btnIniciar = new JButton("Iniciar");
-		btnIniciar.addActionListener(new BtnIniciarActionListener());
-		frame.getContentPane().add(btnIniciar, BorderLayout.WEST);
-
-		btnApagar = new JButton("Apagar");
-		btnApagar.setEnabled(false);
-		btnApagar.addActionListener(new BtnApagarActionListener());
-		frame.getContentPane().add(btnApagar, BorderLayout.EAST);
-
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 292, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0, Double.MIN_VALUE};
+		frame.getContentPane().setLayout(gridBagLayout);
+		
 		btnSancionarConductor = new JButton("Sancionar Conductor");
 		btnSancionarConductor.addActionListener(new BtnSancionarConductorActionListener());
-		frame.getContentPane().add(btnSancionarConductor, BorderLayout.CENTER);
+		GridBagConstraints gbc_btnSancionarConductor = new GridBagConstraints();
+		gbc_btnSancionarConductor.fill = GridBagConstraints.BOTH;
+		gbc_btnSancionarConductor.insets = new Insets(0, 0, 5, 5);
+		gbc_btnSancionarConductor.gridx = 1;
+		gbc_btnSancionarConductor.gridy = 0;
+		frame.getContentPane().add(btnSancionarConductor, gbc_btnSancionarConductor);
+		
+		btnIniciar = new JButton("Iniciar");
+		btnIniciar.addActionListener(new BtnIniciarActionListener());
+		GridBagConstraints gbc_btnIniciar = new GridBagConstraints();
+		gbc_btnIniciar.gridheight = 3;
+		gbc_btnIniciar.fill = GridBagConstraints.VERTICAL;
+		gbc_btnIniciar.insets = new Insets(0, 0, 5, 5);
+		gbc_btnIniciar.gridx = 0;
+		gbc_btnIniciar.gridy = 0;
+		frame.getContentPane().add(btnIniciar, gbc_btnIniciar);
+		
+		btnPagarSancin = new JButton("Pagar Sanción");
+		btnPagarSancin.addActionListener(new BtnPagarSancinActionListener());
+		GridBagConstraints gbc_btnPagarSancin = new GridBagConstraints();
+		gbc_btnPagarSancin.fill = GridBagConstraints.BOTH;
+		gbc_btnPagarSancin.insets = new Insets(0, 0, 5, 5);
+		gbc_btnPagarSancin.gridx = 1;
+		gbc_btnPagarSancin.gridy = 1;
+		frame.getContentPane().add(btnPagarSancin, gbc_btnPagarSancin);
+		
+		btnApagar = new JButton("Apagar");
+		btnApagar.setEnabled(false);
+		btnApagar.addActionListener(new BtnPararActionListener());
+		GridBagConstraints gbc_btnParar = new GridBagConstraints();
+		gbc_btnParar.fill = GridBagConstraints.VERTICAL;
+		gbc_btnParar.gridheight = 3;
+		gbc_btnParar.insets = new Insets(0, 0, 5, 0);
+		gbc_btnParar.gridx = 2;
+		gbc_btnParar.gridy = 0;
+		frame.getContentPane().add(btnApagar, gbc_btnParar);
 
 	}
-
+	
+	
 	private class BtnIniciarActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			iniciarRadar();
 		}
 	}
-
-	private class BtnApagarActionListener implements ActionListener {
+	private class BtnPararActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			pararRadar();
 		}
 	}
-
 	private class BtnSancionarConductorActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			sancionConductor();
 		}
 	}
-
+	
+	private class BtnPagarSancinActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			pagarSancion();
+		}
+	}
+	
 	public void iniciarRadar() {
 		radar = new Radar("Radar 1");
 		radar.start();
@@ -103,7 +144,7 @@ public class Interfaz {
 		btnIniciar.setEnabled(true);
 		btnApagar.setEnabled(false);
 	}
-
+	
 	public void sancionConductor() {
 		// iniciarRadar();
 		// pararRadar();
@@ -142,5 +183,26 @@ public class Interfaz {
 
 		// Manager.get().identifyDriver(1, listaConductores.get(1).getDni());
 		// iniciarRadar();
+	}
+	
+	public void pagarSancion(){
+		String idSancion = JOptionPane.showInputDialog(frame, "indique el id de la sanción",
+				JOptionPane.QUESTION_MESSAGE); // el icono sera un
+												// iterrogante
+		
+		try{
+			int identificadorSancion=Integer.parseInt(idSancion);
+			Manager.get().pay(identificadorSancion);
+		}
+		catch(NoResultException e1){
+			JOptionPane.showMessageDialog(null, "El id indicado: " + idSancion + " no corresponde con ninguna sanción del sistema", // Mensaje
+					"Error", // Título
+					JOptionPane.ERROR_MESSAGE); // Tipo de mensaje
+		}
+		catch(NumberFormatException e2){
+			JOptionPane.showMessageDialog(null, "El id indicado: " + idSancion + " debe de ser de tipo numérico", // Mensaje
+					"Error", // Título
+					JOptionPane.ERROR_MESSAGE); // Tipo de mensaje
+		}
 	}
 }

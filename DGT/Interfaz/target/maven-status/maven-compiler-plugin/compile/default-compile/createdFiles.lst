@@ -1,6 +1,7 @@
-edu\uclm\esi\iso2\Interfaz\App.class
-edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz.class
-edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz$BtnApagarActionListener.class
-edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz$1.class
+edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz$BtnPararActionListener.class
 edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz$BtnIniciarActionListener.class
 edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz$BtnSancionarConductorActionListener.class
+edu\uclm\esi\iso2\Interfaz\App.class
+edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz.class
+edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz$BtnPagarSancinActionListener.class
+edu\uclm\esi\iso2\Interfaz\presentacion\Interfaz$1.class

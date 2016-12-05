@@ -9,7 +9,7 @@
   </parent>
   <groupId>edu.uclm.esi.iso2</groupId>
   <artifactId>Interfaz</artifactId>
-  <version>0.3.0</version>
+  <version>0.4.0</version>
   <name>Interfaz</name>
   <url>http://maven.apache.org</url>
   <properties>
