@@ -30,6 +30,7 @@ public class Interfaz {
 	private JButton btnApagar;
 	private JButton btnSancionarConductor;
 	private JButton btnPagarSancin;
+	private JButton btnCambiarPropietario;
 
 	/**
 	 * Launch the application.
@@ -59,13 +60,14 @@ public class Interfaz {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setResizable(false);
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{0, 292, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
 		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{1.0, 1.0, 1.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		btnSancionarConductor = new JButton("Sancionar Conductor");
@@ -81,8 +83,8 @@ public class Interfaz {
 		btnIniciar.addActionListener(new BtnIniciarActionListener());
 		GridBagConstraints gbc_btnIniciar = new GridBagConstraints();
 		gbc_btnIniciar.gridheight = 3;
-		gbc_btnIniciar.fill = GridBagConstraints.VERTICAL;
-		gbc_btnIniciar.insets = new Insets(0, 0, 5, 5);
+		gbc_btnIniciar.fill = GridBagConstraints.BOTH;
+		gbc_btnIniciar.insets = new Insets(0, 0, 0, 5);
 		gbc_btnIniciar.gridx = 0;
 		gbc_btnIniciar.gridy = 0;
 		frame.getContentPane().add(btnIniciar, gbc_btnIniciar);
@@ -100,12 +102,20 @@ public class Interfaz {
 		btnApagar.setEnabled(false);
 		btnApagar.addActionListener(new BtnPararActionListener());
 		GridBagConstraints gbc_btnParar = new GridBagConstraints();
-		gbc_btnParar.fill = GridBagConstraints.VERTICAL;
+		gbc_btnParar.fill = GridBagConstraints.BOTH;
 		gbc_btnParar.gridheight = 3;
-		gbc_btnParar.insets = new Insets(0, 0, 5, 0);
 		gbc_btnParar.gridx = 2;
 		gbc_btnParar.gridy = 0;
 		frame.getContentPane().add(btnApagar, gbc_btnParar);
+		
+		btnCambiarPropietario = new JButton("Cambiar Propietario");
+		btnCambiarPropietario.addActionListener(new BtnCambiarPropietarioActionListener());
+		GridBagConstraints gbc_btnCambiarPropietario = new GridBagConstraints();
+		gbc_btnCambiarPropietario.fill = GridBagConstraints.BOTH;
+		gbc_btnCambiarPropietario.insets = new Insets(0, 0, 0, 5);
+		gbc_btnCambiarPropietario.gridx = 1;
+		gbc_btnCambiarPropietario.gridy = 2;
+		frame.getContentPane().add(btnCambiarPropietario, gbc_btnCambiarPropietario);
 
 	}
 	
@@ -129,6 +139,11 @@ public class Interfaz {
 	private class BtnPagarSancinActionListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			pagarSancion();
+		}
+	}
+	private class BtnCambiarPropietarioActionListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			cambiarPropietario();
 		}
 	}
 	
@@ -163,8 +178,7 @@ public class Interfaz {
 				listadoIdExpediente, 1);
 		if (seleccion != null) {
 			String dni = JOptionPane.showInputDialog(frame, "indique el dni del conductor",
-					JOptionPane.QUESTION_MESSAGE); // el icono sera un
-													// iterrogante
+					JOptionPane.QUESTION_MESSAGE); 
 			try {
 				if (dni.length() < 7) {
 					for (int i = 0; i <6 && dni.length()<6; i++) {
@@ -187,8 +201,7 @@ public class Interfaz {
 	
 	public void pagarSancion(){
 		String idSancion = JOptionPane.showInputDialog(frame, "indique el id de la sanción",
-				JOptionPane.QUESTION_MESSAGE); // el icono sera un
-												// iterrogante
+				JOptionPane.QUESTION_MESSAGE); 
 		
 		try{
 			int identificadorSancion=Integer.parseInt(idSancion);
@@ -203,6 +216,29 @@ public class Interfaz {
 			JOptionPane.showMessageDialog(null, "El id indicado: " + idSancion + " debe de ser de tipo numérico", // Mensaje
 					"Error", // Título
 					JOptionPane.ERROR_MESSAGE); // Tipo de mensaje
+		}
+	}
+	
+	public void cambiarPropietario(){
+		String vehiculo = JOptionPane.showInputDialog(frame, "Indique la licencia del vehículo que desea cambiar de propietario",
+				JOptionPane.QUESTION_MESSAGE); 
+		String nuevoPropietario=null;
+		
+		if(vehiculo!=null){
+			nuevoPropietario = JOptionPane.showInputDialog(frame, "Indique el dni del nuevo propietario",
+					JOptionPane.QUESTION_MESSAGE); 
+		}
+		 
+		
+		try{
+			if(vehiculo!=null && nuevoPropietario!=null){
+				Manager.get().changeOwner(vehiculo, nuevoPropietario);
+			}
+		}
+		catch(NoResultException e1){
+			JOptionPane.showMessageDialog(null, "La licencia del vehiculo indicado: "+vehiculo+" o el dni del nuevo propietario: "+nuevoPropietario+" no se encuentran en nuestra base de datos", // Mensaje
+					"Error", // Título
+					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 }
