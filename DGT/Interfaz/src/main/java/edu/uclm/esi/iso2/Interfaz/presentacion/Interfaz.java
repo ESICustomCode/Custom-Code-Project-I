@@ -9,9 +9,14 @@ import edu.uclm.esi.iso2.Radar.domain.Radar;
 import edu.uclm.esi.iso2.multas.domain.Driver;
 import edu.uclm.esi.iso2.multas.domain.Inquiry;
 import edu.uclm.esi.iso2.multas.domain.Manager;
+import edu.uclm.esi.iso2.multas.domain.Sanction;
+import edu.uclm.esi.iso2.multas.domain.SanctionHolder;
+import edu.uclm.esi.iso2.multas.domain.Vehicle;
 
 import javax.swing.JButton;
 import javax.swing.plaf.synth.SynthSpinnerUI;
+
+import com.sun.corba.se.spi.oa.OADefault;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
@@ -165,34 +170,50 @@ public class Interfaz {
 		// pararRadar();
 
 		listaExpedientes = new Radar("expedientes").listaExpedientes();
-
-		Object[] listadoIdExpediente = new Object[listaExpedientes.size()];
-		for (int i = 0; i < listadoIdExpediente.length; i++) {
-			listadoIdExpediente[i] = listaExpedientes.get(i).getId();
+		int numeroExpedientes=listaExpedientes.size();
+		int numeroSancionesValidas=0;
+		for(int i=0;i<numeroExpedientes;i++){
+			if(listaExpedientes.get(i).getSanction()==null)
+				numeroSancionesValidas++;
+		}
+		Object[] listadoIdExpediente = new Object[numeroSancionesValidas];
+		
+		int posicion=0;
+		for (int i = 0; i < numeroExpedientes; i++) {
+			if(listaExpedientes.get(i).getSanction()==null)
+				listadoIdExpediente[posicion++] = listaExpedientes.get(i).getId();
 		}
 		Object seleccion = JOptionPane.showInputDialog(frame, "Seleccione el identificador del expediente",
-				"Selección expediente", JOptionPane.QUESTION_MESSAGE, null, // null
-																			// para
-																			// icono
-																			// defecto
+				"Selección expediente", JOptionPane.QUESTION_MESSAGE, null, 
 				listadoIdExpediente, 1);
+		
 		if (seleccion != null) {
-			String dni = JOptionPane.showInputDialog(frame, "indique el dni del conductor",
-					JOptionPane.QUESTION_MESSAGE); 
-			try {
-				if (dni.length() < 7) {
-					for (int i = 0; i <6 && dni.length()<6; i++) {
-						dni = "0" + dni;
-					}
-					dni = "5"+ dni;
-				}				
-				Manager.get().identifyDriver(Integer.parseInt(seleccion.toString()), dni);
-			} catch (NoResultException e1) {
+			
+			List<Driver> listadoConductores=Manager.get().findAll(Driver.class);
+			
+			int cantidadConductores=listadoConductores.size();
+			Object[] listadoDNIConductores=new Object[cantidadConductores];
+			
+			for(int j=0;j<cantidadConductores;j++ ){
+				listadoDNIConductores[j]=listadoConductores.get(j).getDni();
+			}
+			
+			Object dni = JOptionPane.showInputDialog(frame, "Seleccione el dni del conductor",
+					"Selección dni conductor", JOptionPane.QUESTION_MESSAGE, null, 
+					listadoDNIConductores, 1);
+			//String dni = JOptionPane.showInputDialog(frame, "indique el dni del conductor",JOptionPane.QUESTION_MESSAGE); 
+			//try {
+				if(dni!=null){
+					Manager.get().identifyDriver(Integer.parseInt(seleccion.toString()), dni.toString());
+				}
+			//}
+			/*catch (NoResultException e1) {
 				JOptionPane.showMessageDialog(null, "El dni indicado: " + dni + " no corresponde con un dni de un conductor", // Mensaje
 						"Error", // Título
 						JOptionPane.ERROR_MESSAGE); // Tipo de mensaje
 
 			}
+			*/
 		}
 
 		// Manager.get().identifyDriver(1, listaConductores.get(1).getDni());
@@ -200,13 +221,38 @@ public class Interfaz {
 	}
 	
 	public void pagarSancion(){
-		String idSancion = JOptionPane.showInputDialog(frame, "indique el id de la sanción",
-				JOptionPane.QUESTION_MESSAGE); 
+		List<Sanction> listadoSanciones=Manager.get().findAll(Sanction.class);
 		
-		try{
-			int identificadorSancion=Integer.parseInt(idSancion);
+		int cantidadSanciones=listadoSanciones.size();
+		int sancionesNoPagadas=0;
+		for(int i=0;i<cantidadSanciones;i++){
+			if(listadoSanciones.get(i).getDateOfPayment()==null)
+				sancionesNoPagadas++;
+		}
+		
+		
+		Object[] listadoIDSanciones=new Object[sancionesNoPagadas];
+		
+		int posicion=0;
+		for(int j=0;j<cantidadSanciones;j++ ){
+			if(listadoSanciones.get(j).getDateOfPayment()==null)
+				listadoIDSanciones[posicion++]=listadoSanciones.get(j).getId();
+		}
+		
+		Object idSancion = JOptionPane.showInputDialog(frame, "Seleccione el id de la sanción",
+				"Selección identificación sanción", JOptionPane.QUESTION_MESSAGE, null, 
+				listadoIDSanciones, 1);
+		
+		//String idSancion = JOptionPane.showInputDialog(frame, "indique el id de la sanción",JOptionPane.QUESTION_MESSAGE); 
+		
+		//try{
+		if(idSancion!=null){
+			int identificadorSancion=Integer.parseInt(idSancion.toString());
 			Manager.get().pay(identificadorSancion);
 		}
+		
+		//}
+		/*
 		catch(NoResultException e1){
 			JOptionPane.showMessageDialog(null, "El id indicado: " + idSancion + " no corresponde con ninguna sanción del sistema", // Mensaje
 					"Error", // Título
@@ -217,28 +263,55 @@ public class Interfaz {
 					"Error", // Título
 					JOptionPane.ERROR_MESSAGE); // Tipo de mensaje
 		}
+		*/
 	}
 	
 	public void cambiarPropietario(){
-		String vehiculo = JOptionPane.showInputDialog(frame, "Indique la licencia del vehículo que desea cambiar de propietario",
-				JOptionPane.QUESTION_MESSAGE); 
-		String nuevoPropietario=null;
 		
-		if(vehiculo!=null){
-			nuevoPropietario = JOptionPane.showInputDialog(frame, "Indique el dni del nuevo propietario",
-					JOptionPane.QUESTION_MESSAGE); 
+		List<Vehicle> listadoLicencias=Manager.get().findAll(Vehicle.class);
+		int cantidadLicencias=listadoLicencias.size();
+		Object[] listadoLicenciasVehiculo=new Object[cantidadLicencias];
+		
+		for(int i=0;i<cantidadLicencias;i++){
+			listadoLicenciasVehiculo[i]=listadoLicencias.get(i).getLicense();
+		}
+				
+		Object licenciaVehiculo = JOptionPane.showInputDialog(frame, "Seleccione la licencia del vehículo",
+				"Selección licencia vehículo", JOptionPane.QUESTION_MESSAGE, null, 
+				listadoLicenciasVehiculo, 1);
+		
+		//String vehiculo = JOptionPane.showInputDialog(frame, "Indique la licencia del vehículo que desea cambiar de propietario",JOptionPane.QUESTION_MESSAGE); 
+		
+		
+		if(licenciaVehiculo!=null){
+			List<SanctionHolder> listadoPersonas=Manager.get().findAll(SanctionHolder.class);
+			int cantidadPersonas=listadoPersonas.size();
+			Object[] listadoDNIPersonas=new Object[cantidadPersonas];
+			for(int i=0;i<cantidadPersonas;i++){
+				listadoDNIPersonas[i]=listadoPersonas.get(i).getDni();
+			}
+			
+			Object nuevoPropietario = JOptionPane.showInputDialog(frame, "Seleccione el dni del nuevo propietario",
+					"Selección dni nuevo propietario", JOptionPane.QUESTION_MESSAGE, null, 
+					listadoDNIPersonas, 1);
+			
+			//nuevoPropietario = JOptionPane.showInputDialog(frame, "Indique el dni del nuevo propietario",JOptionPane.QUESTION_MESSAGE); 
+			if(nuevoPropietario!=null)
+				Manager.get().changeOwner(licenciaVehiculo.toString(), nuevoPropietario.toString());
 		}
 		 
-		
+		/*
 		try{
-			if(vehiculo!=null && nuevoPropietario!=null){
-				Manager.get().changeOwner(vehiculo, nuevoPropietario);
+			if(licenciaVehiculo!=null && nuevoPropietario!=null){
+				Manager.get().changeOwner(licenciaVehiculo.toString(), nuevoPropietario);
 			}
 		}
-		catch(NoResultException e1){
+		*/
+		/*catch(NoResultException e1){
 			JOptionPane.showMessageDialog(null, "La licencia del vehiculo indicado: "+vehiculo+" o el dni del nuevo propietario: "+nuevoPropietario+" no se encuentran en nuestra base de datos", // Mensaje
 					"Error", // Título
 					JOptionPane.ERROR_MESSAGE);
 		}
+		*/
 	}
 }

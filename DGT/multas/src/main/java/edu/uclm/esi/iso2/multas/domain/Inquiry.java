@@ -116,6 +116,14 @@ public class Inquiry {
 		this.maxSpeed = maxSpeed;
 	}
 
+	public Sanction getSanction() {
+		return sanction;
+	}
+
+	public void setSanction(Sanction sanction) {
+		this.sanction = sanction;
+	}
+
 	private int calculatePoints() {
 		if (maxSpeed==30) {
 			if (speed>=31 && speed<=50) 

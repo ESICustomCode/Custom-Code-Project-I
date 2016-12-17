@@ -1,5 +1,7 @@
 package edu.uclm.esi.iso2.multas.domain;
 
+import java.util.List;
+
 import edu.uclm.esi.iso2.multas.dao.DriverDao;
 import edu.uclm.esi.iso2.multas.dao.GeneralDao;
 import edu.uclm.esi.iso2.multas.dao.OwnerDao;
@@ -52,6 +54,9 @@ public class Manager {
 		GeneralDao<Inquiry> dao=new GeneralDao();
 		Inquiry inquiry=dao.findById(Inquiry.class, idInquiry);
 		Sanction sanction=inquiry.createSanctionFor(dni);
+		inquiry.setSanction(sanction);
+		dao.update(inquiry);
+		
 		return sanction;
 	}
 	
@@ -78,5 +83,17 @@ public class Manager {
 		Owner owner=daoOwner.findByDni(newDni);
 		vehicle.setOwner(owner);
 		daoVehicle.update(vehicle);
+	}
+	
+	public <T> List<T> findAll(Class clazz){
+		List<T> listado=null;
+		GeneralDao dao=new GeneralDao();
+		listado=dao.findAll(clazz);
+		return listado;
+	}
+	
+	public <T> void delete(T object){
+		GeneralDao dao=new GeneralDao();
+		dao.delete(object);
 	}
 }
