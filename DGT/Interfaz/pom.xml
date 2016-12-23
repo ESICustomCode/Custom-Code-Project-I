@@ -83,7 +83,7 @@
     <dependency>
     	<groupId>edu.uclm.esi.iso2</groupId>
     	<artifactId>multas</artifactId>
-    	<version>0.2.1</version>
+    	<version>0.2.5</version>
     </dependency>
   </dependencies>
   

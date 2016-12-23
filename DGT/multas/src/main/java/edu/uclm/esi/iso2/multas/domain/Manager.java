@@ -54,9 +54,8 @@ public class Manager {
 		GeneralDao<Inquiry> dao=new GeneralDao();
 		Inquiry inquiry=dao.findById(Inquiry.class, idInquiry);
 		Sanction sanction=inquiry.createSanctionFor(dni);
-		inquiry.setSanction(sanction);
-		dao.update(inquiry);
-		
+		//inquiry.setSanction(sanction);
+		//dao.update(inquiry);
 		return sanction;
 	}
 	
@@ -69,6 +68,12 @@ public class Manager {
 		Sanction sanction=dao.findById(Sanction.class, idSanction);
 		sanction.pay();
 		dao.update(sanction);
+		
+		DriverDao driverDao=new DriverDao();
+		Driver conductor=driverDao.findByDni(sanction.getSanctionHolder().getDni());
+		conductor.setPoints(conductor.getPoints()-sanction.getPoints());
+		driverDao.update(conductor);
+		
 	}
 	
 	/**

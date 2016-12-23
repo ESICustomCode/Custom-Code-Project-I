@@ -3,6 +3,9 @@ package edu.uclm.esi.iso2.multas.dao;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+
+import edu.uclm.esi.iso2.multas.domain.Inquiry;
+
 import org.hibernate.Query;
 
 import java.util.List;
@@ -78,6 +81,21 @@ public class GeneralDao<T> {
         try {
             startOperation();
             Query query = session.createQuery("from " + clazz.getName());
+            objects = query.list();
+            transaction.commit();
+        } catch(HibernateException e) {
+        	throw e;
+        } finally {
+            HibernateFactory.close(session);
+        }
+        return objects;
+    }
+    
+    public List<Inquiry> findInquirySantion(int idSanction)throws HibernateException{
+    	List<Inquiry> objects = null;
+        try {
+            startOperation();
+            Query query = session.createQuery("from Inquiry where sanction_id="+idSanction);
             objects = query.list();
             transaction.commit();
         } catch(HibernateException e) {

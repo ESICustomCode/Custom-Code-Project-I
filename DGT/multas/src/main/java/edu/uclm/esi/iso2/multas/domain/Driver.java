@@ -9,9 +9,9 @@ import javax.persistence.Table;
 public class Driver extends SanctionHolder {
 	@Column
 	private int points;
-	
+
 	public Driver() {
-		this.points=12;
+		this.points = 12;
 	}
 
 	public Driver(String dni, String name, String lastName, String fullAddress) {
@@ -25,6 +25,5 @@ public class Driver extends SanctionHolder {
 	public void setPoints(int points) {
 		this.points = points;
 	}
-	
-	
+
 }

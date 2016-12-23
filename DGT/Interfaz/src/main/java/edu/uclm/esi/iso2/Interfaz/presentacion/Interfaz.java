@@ -273,7 +273,7 @@ public class Interfaz {
 		Object[] listadoLicenciasVehiculo=new Object[cantidadLicencias];
 		
 		for(int i=0;i<cantidadLicencias;i++){
-			listadoLicenciasVehiculo[i]=listadoLicencias.get(i).getLicense();
+		listadoLicenciasVehiculo[i]=listadoLicencias.get(i).getLicense();
 		}
 				
 		Object licenciaVehiculo = JOptionPane.showInputDialog(frame, "Seleccione la licencia del vehículo",
